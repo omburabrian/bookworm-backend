@@ -23,6 +23,7 @@ db.recipeIngredient = require("./recipeIngredient.model.js")(
 );
 db.session = require("./session.model.js")(sequelize, Sequelize);
 db.user = require("./user.model.js")(sequelize, Sequelize);
+db.author = require("./author.model.js")(sequelize, Sequelize); //register author model in index.js
 
 // foreign key for session
 db.user.hasMany(

@@ -4,7 +4,7 @@ const Session = db.session;
 const User = db.user;
 
 /**
- * Gets the authentication for this request. Throws an error if there is an authentcation problem.
+ * Gets the authentication for this request. Throws an error if there is an authentication problem.
  * If require is false, makes authentication optional.
  * If require is a string, enforces a specific type of authentication (credentials or token).
  * @return {{type: string, userId: string}}
