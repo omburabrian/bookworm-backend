@@ -3,27 +3,27 @@ const Author = db.author;
 const Op = db.Sequelize;
 
 // Create a new Author
-// exports.create = async (req, res) => {
-//   const { name, description } = req.body;
+exports.create = async (req, res) => {
+  const { name, description } = req.body;
 
-//   if (!name) {
-//     return res.status(400).json({ message: "Name cannot be empty!" });
-//   }
-//   if (!description) {
-//     return res
-//       .status(400)
-//       .json({ message: "Please provide a description for the author!" });
-//   }
+  if (!name) {
+    return res.status(400).json({ message: "Name cannot be empty!" });
+  }
+  if (!description) {
+    return res
+      .status(400)
+      .json({ message: "Please provide a description for the author!" });
+  }
 
-//   try {
-//     const author = await Author.create({ name, description });
-//     res.status(201).json(author);
-//   } catch (err) {
-//     res.status(500).json({
-//       message: err.message || "Error occurred while creating the Author.",
-//     });
-//   }
-// };
+  try {
+    const author = await Author.create({ name, description });
+    res.status(201).json(author);
+  } catch (err) {
+    res.status(500).json({
+      message: err.message || "Error occurred while creating the Author.",
+    });
+  }
+};
 
 exports.create = async (req, res) => {
   const { name, description } = req.body;

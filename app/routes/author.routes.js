@@ -4,7 +4,7 @@ module.exports = (app) => {
   const { authenticateRoute } = require("../authentication/authentication.js");
 
   // Create a new Author
-  router.post("/authors/", Author.create);
+  router.post("/authors/", [authenticateRoute], Author.create);
 
   // Retrieve all Authors
   router.get("/authors/", Author.findAll);
@@ -13,13 +13,13 @@ module.exports = (app) => {
   router.get("/authors/:id", Author.findOne);
 
   // Update an Author with authorId
-  router.put("/authors/:id", Author.update);
+  router.put("/authors/:id", [authenticateRoute], Author.update);
 
   // Delete an Author with authorId
-  router.delete("/authors/:id", Author.delete);
+  router.delete("/authors/:id", [authenticateRoute], Author.delete);
 
   // Delete all Authors
-  router.delete("/authors/",  Author.deleteAll);
+  router.delete("/authors/", [authenticateRoute], Author.deleteAll);
 
   app.use("/bookwormapi", router);
 };
