@@ -93,4 +93,6 @@ db.recipeIngredient.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
+db.book = require("./book.model.js")(sequelize, Sequelize); 
+
 module.exports = db;
