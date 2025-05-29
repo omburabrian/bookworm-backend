@@ -29,7 +29,7 @@ npm install
    - Add the following line as the **last line**:
 
    ```
-   ProxyPass /bookwormapi http://localhost:3200/bookwormapi
+   ProxyPass /bookwormapi http://localhost:3201/bookwormapi
    ```
 
    - Find the following line and remove the **#** at the front of the line.
