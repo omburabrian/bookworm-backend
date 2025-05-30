@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to the recipe backend." });
+  res.json({ message: "Welcome to bookworm backend." });
 });
 
 require("./app/routes/auth.routes.js")(app);
@@ -36,9 +36,10 @@ require("./app/routes/recipe.routes")(app);
 require("./app/routes/recipeStep.routes")(app);
 require("./app/routes/recipeIngredient.routes")(app);
 require("./app/routes/user.routes")(app);
+require("./app/routes/author.routes")(app); // register author routes
 
 // set port, listen for requests
-const PORT = process.env.PORT || 3200;
+const PORT = process.env.PORT || 3201;
 if (process.env.NODE_ENV !== "test") {
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);

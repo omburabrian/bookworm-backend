@@ -1,6 +1,6 @@
-# Recipe Backend with Node
+# BookWorm Backend with Node
 
-This application allows users to create and maintain a list of recipes that have steps and ingredients. Please visit https://github.com/OC-ComputerScience/recipe-frontend for the Vue 3 frontend repository.
+This application allows users to create and maintain a list of books.
 
 #### Please note:
 
@@ -11,10 +11,10 @@ This application allows users to create and maintain a list of recipes that have
 1. Clone the project into your **XAMPP/xamppfiles/htdocs** directory.
 
 ```
-git clone https://github.com/OC-ComputerScience/recipe-backend.git
+git clone https://github.com/omburabrian/bookworm-backend.git
 ```
 
-2. Install the project.
+2. Install the project dependencies.
 
 ```
 npm install
@@ -29,7 +29,7 @@ npm install
    - Add the following line as the **last line**:
 
    ```
-   ProxyPass /recipeapi http://localhost:3200/recipeapi
+   ProxyPass /bookwormapi http://localhost:3201/bookwormapi
    ```
 
    - Find the following line and remove the **#** at the front of the line.
@@ -42,7 +42,7 @@ npm install
    - Save the file.
    - **Restart Apache** and exit XAMPP.
 
-4. Make a local **recipe_db** database.
+4. Make a local **bookworm_db** database.
 
    - Create a schema/database.
    - The Sequelize in this project will make all the tables for you.
