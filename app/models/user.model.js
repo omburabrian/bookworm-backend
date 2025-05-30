@@ -15,13 +15,14 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
     },
     password: {
-      type: Sequelize.BLOB,
+      type: Sequelize.BLOB, // long enough for hex string
       allowNull: false,
     },
     salt: {
-      type: Sequelize.BLOB,
+      type: Sequelize.BLOB, // 16 bytes in hex = 32 chars (safe with 40)
       allowNull: false,
     },
+    
   });
 
   return User;

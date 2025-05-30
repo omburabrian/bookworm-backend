@@ -11,7 +11,7 @@ const User = db.user;
  */
 authenticate = async (req, res, require = true) => {
   let auth = req.get("authorization");
-  console.log(auth);
+  console.log("here ", req.headers);
   if (auth != null) {
     if (
       auth.startsWith("Basic ") &&
