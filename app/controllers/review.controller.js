@@ -1,6 +1,6 @@
 const db = require("../models");
 const Review = db.review;
-const Book = db.book;
+//  const Book = db.book;
 const Author = db.author;
 
 const Op = db.Sequelize.Op;
@@ -44,12 +44,14 @@ exports.create = (req, res) => {
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Get all reviews for a user
-exports.getAllForUser = (req, res) => {
+exports.findAllForUser = (req, res) => {
 
   const userId = req.params.userId;
 
   Review.findAll({
     where: { userId: userId },
+    //  ToDo: Add BOOK to REVIEW
+    /*
     include: [
       {
         model: Book,
@@ -69,6 +71,7 @@ exports.getAllForUser = (req, res) => {
       [Book, "title", "ASC"],
       //   Or by review date?
     ],
+    //  */
   })
     .then((data) => {
       if (data) {
@@ -89,8 +92,9 @@ exports.getAllForUser = (req, res) => {
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Get all reviews
-exports.getAll = (req, res) => {
-  Review.getAll({
+exports.findAll = (req, res) => {
+  Review.findAll({
+    /*
     include: [
       {
         model: Book,
@@ -110,6 +114,7 @@ exports.getAll = (req, res) => {
       [Book, "title", "ASC"],
       //   Or by review date?  Or author?
     ],
+    //  */
   })
     .then((data) => {
       if (data) {
@@ -129,12 +134,13 @@ exports.getAll = (req, res) => {
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Get a single review with the id
-exports.getOne = (req, res) => {
+exports.findOne = (req, res) => {
 
   const id = req.params.id;
 
-  Review.getAll({
+  Review.findAll({
     where: { id: id },
+    /*
     include: [
       {
         model: Book,
@@ -156,6 +162,7 @@ exports.getOne = (req, res) => {
       [Book, "title", "ASC"],
       //   Or by review date?  Or author?
     ],
+    //  */
   })
     .then((data) => {
       if (data) {

@@ -10,11 +10,11 @@ module.exports = (app) => {
   // Retrieve all Reviews
   router.get(
     "/reviews",
-    Review.getAll
+    Review.findAll
   );
 
   // Retrieve a single Review with id
-  router.get("/reviews/:id", Review.getOne);
+  router.get("/reviews/:id", Review.findOne);
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   //  AUTHENTICATED ROUTES
@@ -23,7 +23,7 @@ module.exports = (app) => {
   router.get(
     "/reviews/user/:userId",
     [authenticateRoute],
-    Review.getAllForUser
+    Review.findAllForUser
   );
 
   // Create a new Review
