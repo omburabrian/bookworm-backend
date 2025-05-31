@@ -6,7 +6,7 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
     },
     reviewText: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(3000),
       allowNull: false,
     },
   });

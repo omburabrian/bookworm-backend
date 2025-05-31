@@ -39,5 +39,9 @@ module.exports = (app) => {
   router.delete("/reviews", [authenticateRoute], Review.deleteAll);
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //  Dev tools
+  router.post("/reviews/bulkCreate", [authenticateRoute], Review.bulkCreate);
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   app.use("/bookwormapi", router);
 };

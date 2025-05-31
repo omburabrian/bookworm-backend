@@ -252,3 +252,25 @@ exports.deleteAll = (req, res) => {
       });
     });
 };
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//  Create multiple reviews at once (from JSON array)
+exports.bulkCreate = (req, res) => {
+
+  //  Create a collection of reviews directly from the JSON array in the body.
+  const reviews = req.body;
+
+  console.log(reviews);
+
+  Review.bulkCreate(reviews)
+    .then((data) => {
+      res.send(data);
+      //  res.send({ message: `${number} book reviews were created successfully!` });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "An error occurred during bulk creation of reviews.",
+      });
+    });
+};
