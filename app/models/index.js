@@ -156,14 +156,20 @@ db.userBooks.belongsTo(db.book, { foreignKey: "bookId" });
 db.user.hasMany(db.userListSettings, { foreignKey: "userId" });
 db.userListSettings.belongsTo(db.user, { foreignKey: "userId" });
 
-// Friends
-// Self-referencing many-to-many
+// Friends (self-referencing many-to-many)
 db.user.belongsToMany(db.user, {
-  as: "friends",
   through: db.friends,
+  as: "sentFriends",
   foreignKey: "userId",
   otherKey: "friendId",
 });
+db.user.belongsToMany(db.user, {
+  through: db.friends,
+  as: "receivedFriends",
+  foreignKey: "friendId",
+  otherKey: "userId",
+});
+
 //  ############################################################
 
 module.exports = db;
