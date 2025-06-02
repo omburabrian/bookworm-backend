@@ -34,6 +34,7 @@ require("./app/routes/recipeStep.routes")(app);
 require("./app/routes/recipeIngredient.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/author.routes")(app); // register author routes
+require("./app/routes/review.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3201;
