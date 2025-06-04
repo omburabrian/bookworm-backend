@@ -6,217 +6,151 @@ const { encrypt, getSalt, hashPassword } = require("../authentication/crypto");
 
 // Create and Save a new User
 exports.create = async (req, res) => {
-  // Validate request
-  if (req.body.firstName === undefined) {
-    const error = new Error("First name cannot be empty for user!");
-    error.statusCode = 400;
-    throw error;
-  } else if (req.body.lastName === undefined) {
-    const error = new Error("Last name cannot be empty for user!");
-    error.statusCode = 400;
-    throw error;
-  } else if (req.body.email === undefined) {
-    const error = new Error("Email cannot be empty for user!");
-    error.statusCode = 400;
-    throw error;
-  } else if (req.body.password === undefined) {
-    const error = new Error("Password cannot be empty for user!");
-    error.statusCode = 400;
-    throw error;
-  }
+  try {
+    const { id, firstName, lastName, email, password } = req.body;
+    if (!firstName || !lastName || !email || !password) {
+      return res.status(400).send({ message: "Missing required fields" });
+    }
 
-  // find by email
-  await User.findOne({
-    where: {
-      email: req.body.email,
-    },
-  })
-    .then(async (data) => {
-      if (data) {
-        return "This email is already in use.";
-      } else {
-        console.log("email not found");
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).send({ message: "Email is already in use" });
+    }
 
-        let salt = await getSalt();
-        let hash = await hashPassword(req.body.password, salt);
+    const salt = await getSalt();
+    const hash = await hashPassword(password, salt);
 
-        // Create a User
-        const user = {
-          id: req.body.id,
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
-          email: req.body.email,
-          password: hash,
-          salt: salt,
-        };
-
-        // Save User in the database
-        await User.create(user)
-          .then(async (data) => {
-            // Create a Session for the new user
-            let userId = data.id;
-
-            let expireTime = new Date();
-            expireTime.setDate(expireTime.getDate() + 1);
-
-            const session = {
-              email: req.body.email,
-              userId: userId,
-              expirationDate: expireTime,
-            };
-            await Session.create(session).then(async (data) => {
-              let sessionId = data.id;
-              let token = await encrypt(sessionId);
-              let userInfo = {
-                email: user.email,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                id: user.id,
-                token: token,
-              };
-              res.send(userInfo);
-            });
-          })
-          .catch((err) => {
-            console.log(err);
-            res.status(500).send({
-              message:
-                err.message || "Some error occurred while creating the User.",
-            });
-          });
-      }
-    })
-    .catch((err) => {
-      return err.message || "Error retrieving User with email=" + email;
+    const newUser = await User.create({
+      id,
+      firstName,
+      lastName,
+      email,
+      password: hash,
+      salt,
     });
+
+    const expireTime = new Date();
+    expireTime.setDate(expireTime.getDate() + 1);
+
+    const session = await Session.create({
+      email,
+      userId: newUser.id,
+      expirationDate: expireTime,
+    });
+
+    const token = await encrypt(session.id);
+
+    res.send({
+      id: newUser.id,
+      email,
+      firstName,
+      lastName,
+      token,
+    });
+  } catch (err) {
+    console.error("Create user error:", err);
+    res.status(500).send({ message: "Server error" });
+  }
 };
 
-// Retrieve all Users from the database.
+// Login
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).send({ message: "Email and password are required" });
+    }
+
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return res.status(401).send({ message: "Invalid email or password" });
+    }
+
+    const computedHash = await hashPassword(password, user.salt);
+    if (computedHash !== user.password) {
+      return res.status(401).send({ message: "Invalid email or password" });
+    }
+
+    const expireTime = new Date();
+    expireTime.setDate(expireTime.getDate() + 1);
+
+    const session = await Session.create({
+      email,
+      userId: user.id,
+      expirationDate: expireTime,
+    });
+
+    const token = await encrypt(session.id);
+
+    res.send({
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      token,
+    });
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).send({ message: "Server error" });
+  }
+};
+
+// Find all users
 exports.findAll = (req, res) => {
   const id = req.query.id;
-  var condition = id ? { id: { [Op.like]: `%${id}%` } } : null;
-
+  const condition = id ? { id: { [Op.like]: `%${id}%` } } : null;
   User.findAll({ where: condition })
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while retrieving users.",
-      });
-    });
+    .then(data => res.send(data))
+    .catch(err => res.status(500).send({ message: err.message }));
 };
 
-// Find a single User with an id
+// Find user by ID
 exports.findOne = (req, res) => {
   const id = req.params.id;
-
   User.findByPk(id)
-    .then((data) => {
-      if (data) {
-        res.send(data);
-      } else {
-        res.status(404).send({
-          message: `Cannot find User with id = ${id}.`,
-        });
-      }
+    .then(data => {
+      if (data) res.send(data);
+      else res.status(404).send({ message: `User not found with id = ${id}` });
     })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Error retrieving User with id = " + id,
-      });
-    });
+    .catch(err => res.status(500).send({ message: err.message }));
 };
 
-// Find a single User with an email
+// Find user by email
 exports.findByEmail = (req, res) => {
   const email = req.params.email;
-
-  User.findOne({
-    where: {
-      email: email,
-    },
-  })
-    .then((data) => {
-      if (data) {
-        res.send(data);
-      } else {
-        res.send({ email: "not found" });
-        /*res.status(404).send({
-          message: `Cannot find User with email=${email}.`
-        });*/
-      }
+  User.findOne({ where: { email } })
+    .then(data => {
+      if (data) res.send(data);
+      else res.status(404).send({ message: `User not found with email = ${email}` });
     })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Error retrieving User with email=" + email,
-      });
-    });
+    .catch(err => res.status(500).send({ message: err.message }));
 };
 
-// Update a User by the id in the request
+// Update user
 exports.update = (req, res) => {
   const id = req.params.id;
-
-  User.update(req.body, {
-    where: { id: id },
-  })
-    .then((number) => {
-      if (number == 1) {
-        res.send({
-          message: "User was updated successfully.",
-        });
-      } else {
-        res.send({
-          message: `Cannot update User with id = ${id}. Maybe User was not found or req.body is empty!`,
-        });
-      }
+  User.update(req.body, { where: { id } })
+    .then(num => {
+      if (num == 1) res.send({ message: "User updated successfully." });
+      else res.send({ message: `Cannot update user with id = ${id}` });
     })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Error updating User with id =" + id,
-      });
-    });
+    .catch(err => res.status(500).send({ message: err.message }));
 };
 
-// Delete a User with the specified id in the request
+// Delete user
 exports.delete = (req, res) => {
   const id = req.params.id;
-
-  User.destroy({
-    where: { id: id },
-  })
-    .then((number) => {
-      if (number == 1) {
-        res.send({
-          message: "User was deleted successfully!",
-        });
-      } else {
-        res.send({
-          message: `Cannot delete User with id = ${id}. Maybe User was not found!`,
-        });
-      }
+  User.destroy({ where: { id } })
+    .then(num => {
+      if (num == 1) res.send({ message: "User deleted successfully!" });
+      else res.send({ message: `Cannot delete user with id = ${id}` });
     })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Could not delete User with id = " + id,
-      });
-    });
+    .catch(err => res.status(500).send({ message: err.message }));
 };
 
-// Delete all People from the database.
+// Delete all users
 exports.deleteAll = (req, res) => {
-  User.destroy({
-    where: {},
-    truncate: false,
-  })
-    .then((number) => {
-      res.send({ message: `${number} People were deleted successfully!` });
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while removing all people.",
-      });
-    });
+  User.destroy({ where: {}, truncate: false })
+    .then(num => res.send({ message: `${num} users were deleted successfully!` }))
+    .catch(err => res.status(500).send({ message: err.message }));
 };
