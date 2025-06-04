@@ -14,11 +14,7 @@ module.exports = (sequelize, Sequelize) => {
       description: {
         type: Sequelize.STRING,
       },
-    },
-    {
-      timestamps: false,
-    }
-  );
+    });
 
   return Author;
 };

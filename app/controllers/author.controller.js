@@ -146,3 +146,25 @@ exports.findAllByName = async (req, res) => {
     });
   }
 };
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//  Create multiple authors at once (from JSON array)
+exports.bulkCreate = (req, res) => {
+
+  //  Create a collection of authors directly from the JSON array in the body.
+  const authors = req.body;
+
+  //  console.log(authors);
+
+  Author.bulkCreate(authors)
+    .then((data) => {
+      res.send(data);
+      //  res.send({ message: `${number} book authors were created successfully!` });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "An error occurred during bulk creation of authors.",
+      });
+    });
+};
