@@ -1,13 +1,18 @@
 module.exports = (app) => {
   const BookAuthor = require("../controllers/bookAuthor.controller.js");
-  var router = require("express").Router();
+  const router = require("express").Router();
 
-  router.post("/bookAuthors/", BookAuthor.create);
-  router.get("/bookAuthors/", BookAuthor.findAll);
-  router.get("/bookAuthors/:id", BookAuthor.findOne);
-  router.put("/bookAuthors/:id", BookAuthor.update);
-  router.delete("/bookAuthors/:id", BookAuthor.delete);
-  router.delete("/bookAuthors/", BookAuthor.deleteAll);
+  // Create a new BookAuthor link
+  router.post("/bookAuthors/", BookAuthor.link); // expects { bookId, authorId }
+
+  // Unlink a book from an author
+  router.delete("/bookAuthors/", BookAuthor.unlink); // expects { bookId, authorId }
+
+  // Get all authors for a book
+  router.get("/bookAuthors/byBook/:bookId", BookAuthor.findAuthorsByBook);
+
+  // Get all books for an author
+  router.get("/bookAuthors/byAuthor/:authorId", BookAuthor.findBooksByAuthor);
 
   app.use("/bookwormapi", router);
 };
