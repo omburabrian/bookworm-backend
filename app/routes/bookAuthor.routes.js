@@ -3,7 +3,7 @@ module.exports = (app) => {
   const router = require("express").Router();
 
   // Create a new BookAuthor link
-  router.post("/bookAuthors/", BookAuthor.link); // expects { bookId, authorId }
+  router.post("/bookAuthors/", BookAuthor.linkMultiple); // expects { bookId, authorId }
 
   // Unlink a book from an author
   router.delete("/bookAuthors/", BookAuthor.unlink); // expects { bookId, authorId }
@@ -13,6 +13,11 @@ module.exports = (app) => {
 
   // Get all books for an author
   router.get("/bookAuthors/byAuthor/:authorId", BookAuthor.findBooksByAuthor);
+
+  // Unlink all authors from a book
+  router.delete("/bookAuthors/byBook/:bookId", BookAuthor.unlinkByBook);
+  // Unlink all books from an author
+  router.delete("/bookAuthors/byAuthor/:authorId", BookAuthor.unlinkByAuthor);
 
   app.use("/bookwormapi", router);
 };
