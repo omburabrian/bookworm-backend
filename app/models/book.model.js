@@ -8,10 +8,20 @@ module.exports = (sequelize, Sequelize) => {
     title: {
       type: Sequelize.STRING,
       allowNull: false,
+      validate: {
+          notEmpty: {
+             msg: "Title cannot be empty",
+          },
+      },
     },
     ISBN: {
       type: Sequelize.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "ISBN cannot be empty",
+        },
+      },
     },
     publicationDate: {
       type: Sequelize.DATE,
