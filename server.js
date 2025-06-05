@@ -7,7 +7,10 @@ const app = express();
 
 const db = require("./app/models");
 
-db.sequelize.sync();
+//db.sequelize.sync({ force: true });
+db.sequelize.sync({ force: false }).then(() => {
+  console.log("Database synced");
+});
 
 var corsOptions = {
   origin: "http://localhost:8081",
