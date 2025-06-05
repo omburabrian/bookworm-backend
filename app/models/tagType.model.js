@@ -8,6 +8,11 @@ module.exports = (sequelize, Sequelize) => {
     name: {
       type: Sequelize.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Tag type name cannot be empty",
+        },
+      },
     },
   });
 };
