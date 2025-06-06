@@ -38,6 +38,9 @@ require("./app/routes/recipeIngredient.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/author.routes")(app); // register author routes
 require("./app/routes/review.routes")(app);
+require("./app/routes/book.routes")(app);
+require("./app/routes/userBooks.routes")(app);
+require("./app/routes/bookAuthor.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3201;

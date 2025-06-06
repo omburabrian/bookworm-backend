@@ -1,26 +1,33 @@
+
 module.exports = (sequelize, Sequelize) => {
-  return sequelize.define("book", {
-    bookId: {
+  const Book = sequelize.define("book", {
+    id: {
       type: Sequelize.INTEGER,
-      primaryKey: true,
       autoIncrement: true,
+      primaryKey: true,
+    },
+    isbn: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: true,
     },
     title: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    ISBN: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    publicationDate: {
+    date: {
       type: Sequelize.DATE,
+      allowNull: true,
     },
     cover: {
       type: Sequelize.STRING,
+      allowNull: true,
     },
     description: {
       type: Sequelize.TEXT,
+      allowNull: true,
     },
   });
+
+  return Book;
 };
