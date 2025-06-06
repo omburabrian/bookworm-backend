@@ -3,16 +3,18 @@ const BookAuthor = db.bookAuthor;
 const Book = db.book;
 const Author = db.author;
 
-// Link a book to an author
-exports.link = async (req, res) => {
-  const { bookId, authorId } = req.body;
+// Link a book to an author (accepts and array of bookId and authorId))
+exports.linkMultiple = async (req, res) => {
+  const { bookId, authorIds } = req.body;
   try {
-    const result = await BookAuthor.create({ bookId, authorId });
+    const links = authorIds.map(authorId => ({ bookId, authorId }));
+    const result = await BookAuthor.bulkCreate(links);
     res.send(result);
   } catch (err) {
     res.status(500).send({ message: err.message });
   }
 };
+
 
 // Remove the link between a book and an author
 exports.unlink = async (req, res) => {
@@ -25,6 +27,29 @@ exports.unlink = async (req, res) => {
     res.status(500).send({ message: err.message });
   }
 };
+
+// Unlink all authors from a specific book
+exports.unlinkByBook = async (req, res) => {
+  try {
+    const bookId = req.params.bookId;
+    const rows = await BookAuthor.destroy({ where: { bookId } });
+    res.send({ message: `${rows} author(s) unlinked from book ${bookId}` });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+// Unlink all books from a specific author
+exports.unlinkByAuthor = async (req, res) => {
+  try {
+    const authorId = req.params.authorId;
+    const rows = await BookAuthor.destroy({ where: { authorId } });
+    res.send({ message: `${rows} book(s) unlinked from author ${authorId}` });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
 
 // Get all authors for a specific book
 exports.findAuthorsByBook = async (req, res) => {
