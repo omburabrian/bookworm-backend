@@ -33,6 +33,10 @@ db.tagType = require("./tagType.model.js")(sequelize, Sequelize);
 db.userBooks = require("./userBooks.model.js")(sequelize, Sequelize);
 db.userListSettings = require("./userListSettings.model.js")(sequelize, Sequelize);
 
+//  TESTING:  @@@@@@@@@@@@@@@@@@@@@@@@@@################################
+db.bw_book = require("./bw_book.model.js")(sequelize, Sequelize);
+db.bw_author = require("./bw_author.model.js")(sequelize, Sequelize);
+
 // ------------------------------------------------------------
 //  Define the foreign keys for the various models/tables.
 
@@ -170,6 +174,20 @@ db.user.belongsToMany(db.user, {
   otherKey: "userId",
 });
 
-//  ############################################################
+//  ##############################################################
+//  Testing many-to-many relationship definitions with Sequelize
+//  https://sequelize.org/docs/v6/advanced-association-concepts/advanced-many-to-many/
+
+//  Specify the [bridge | junction] table so can OMIT the timestamps.
+//  (Actual table name will be *plural*, e.g. "bw_book_authors").
+const BwBookAuthor = sequelize.define('bw_book_author', {}, { timestamps: false });
+
+//  BwBook.belongsToMany(BwAuthor, { through: 'BwBook_BwAuthor' });
+db.bw_book.belongsToMany(db.bw_author, { through: 'bw_book_author' });
+
+//  BwAuthor.belongsToMany(BwBook, { through: 'BwBook_BwAuthor' });
+db.bw_author.belongsToMany(db.bw_book, { through: 'bw_book_author' });
+
+//  ##############################################################
 
 module.exports = db;

@@ -1,5 +1,7 @@
 const db = require("../models");
 const Book = db.book;
+const BookAuthor = db.bookAuthor;
+const Author = db.author;
 
 // Create a new book
 exports.create = async (req, res) => {
@@ -64,4 +66,44 @@ exports.deleteAll = async (req, res) => {
   } catch (err) {
     res.status(500).send({ message: err.message });
   }
+};
+
+//  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#############################
+//  TESTING:  Get all books with their authors
+//  BOOK REVIEWS needs the AUTHOR with the BOOK.
+exports.findAllWithAuthors = (req, res) => {
+  Book.findAll({
+    //  Get all the books = no where clause.
+    //  where: {},
+    include: [
+      {
+        model: BookAuthor,
+        as: "bookAuthor",
+        required: false,
+        include: [
+          {
+            model:  Author,
+            as: "author",
+            required: false,
+          }
+        ],
+      },
+    ],
+    order: [
+      ["title", "ASC"],
+      [Author, "name", "ASC"],
+    ],
+  }).then((data) => {
+    if (data) {
+      res.send(data);
+    } else {
+      res.status(404).send({
+        message: `Cannot find BOOKS.`,
+      });
+    }
+  }).catch((error) => {
+    res.status(500).send({
+      message: error.message || "Error retrieving BOOKS."
+    });
+  })
 };

@@ -15,6 +15,10 @@ module.exports = (app) => {
   router.delete("/books/:id",[authenticateRoute],  Book.delete);
   // Delete all Books
   router.delete("/books/", [authenticateRoute], Book.deleteAll);
-  
+
+  //  @@@@@@@@@@@@@@@@@@@@@@@@###############################
+  //  TESTING:  Get all books with their author(s)
+  router.get("/booksWithAuthors/", Book.findAllWithAuthors);
+
   app.use("/bookwormapi", router);
 };
