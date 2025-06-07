@@ -1,7 +1,7 @@
 const db = require("../models");
 
 const BwBook = db.bw_book;
-//  const BwAuthor = db.bw_author;
+const BwAuthor = db.bw_author;
 const Op = db.Sequelize.Op;
 
 //-----------------------------------------------------------------
@@ -46,6 +46,13 @@ exports.create = (req, res) => {
 exports.findAll = (req, res) => {
 
   BwBook.findAll({
+    include: [
+      {
+        model: BwAuthor,
+        as: "bw_authors",
+        required: false
+      }
+    ],
     order: [
       ["title", "ASC"],
     ],
@@ -73,6 +80,14 @@ exports.findOne = (req, res) => {
   const id = req.params.id;
   BwBook.findAll({
     where: { id: id },
+    include: [
+      {
+        model: BwAuthor,
+        as: "bw_authors",
+        required: false
+      }
+    ],
+
   })
     .then((data) => {
       //  ToDo: check empty array for finding bw_book with id

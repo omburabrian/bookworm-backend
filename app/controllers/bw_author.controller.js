@@ -1,7 +1,7 @@
 const db = require("../models");
 
-//  const BwBook = db.bw_book;
 const BwAuthor = db.bw_author;
+const BwBook = db.bw_book;
 const Op = db.Sequelize.Op;
 
 //-----------------------------------------------------------------
@@ -38,7 +38,28 @@ exports.create = (req, res) => {
 //  Find all AUTHORS
 exports.findAll = (req, res) => {
 
+  /*
+  ?????????????????????????????????????????????
+  ToDo:  Why plural relationship name?
+
+  "bw_book" is the related model name in "bw_book.model.js",
+  but the relationship must be defined as plural: "bw_books".
+
+  Why?
+  Because the relationship ~= bw_author.belongsToMany(bw_book),
+  or
+  because the db table name == "bw_books"?
+  ?????????????????????????????????????????????
+  //  */
+
   BwAuthor.findAll({
+    include: [
+      {
+        model: BwBook,
+        as: "bw_books",
+        required: false
+      }
+    ],
     order: [
       ["name", "ASC"],
     ],
@@ -68,6 +89,13 @@ exports.findOne = (req, res) => {
 
   BwAuthor.findAll({
     where: { id: id },
+    include: [
+      {
+        model: BwBook,
+        as: "bw_books",
+        required: false
+      }
+    ],
   })
     .then((data) => {
       //  ToDo: check empty array for finding bw_author with id
