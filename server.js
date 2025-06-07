@@ -42,6 +42,10 @@ require("./app/routes/book.routes")(app);
 require("./app/routes/userBooks.routes")(app);
 require("./app/routes/bookAuthor.routes")(app);
 
+//  TESTING:  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#############################
+require("./app/routes/bw_book.routes")(app);
+require("./app/routes/bw_author.routes")(app);
+
 // set port, listen for requests
 const PORT = process.env.PORT || 3201;
 if (process.env.NODE_ENV !== "test") {
