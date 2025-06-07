@@ -1,7 +1,11 @@
 const db = require("../models");
 const Review = db.review;
+
+//  TEST @@@@@@@@@@@@@@@@@@@##################### Change relation to these other tables
+const BwBook = db.bw_book;
+const BwAuthor = db.bw_author;
 //  const Book = db.book;
-const Author = db.author;
+//  const Author = db.author;
 
 const Op = db.Sequelize.Op;
 
@@ -51,16 +55,17 @@ exports.findAllForUser = (req, res) => {
   Review.findAll({
     where: { userId: userId },
     //  ToDo: Add BOOK to REVIEW
-    /*
+    //  /*
     include: [
       {
-        model: Book,
-        as: "book",
+        model: BwBook,
+        as: "bw_book",
         required: true,
         include: [
           {
-            model: Author,
-            as: "author",
+            model: BwAuthor,
+            //  This is the table name and it must be *plural*.
+            as: "bw_authors",
             required: false,
           },
         ],
@@ -68,7 +73,7 @@ exports.findAllForUser = (req, res) => {
     ],
     order: [
       //  ["name", "ASC"],
-      [Book, "title", "ASC"],
+      [BwBook, "title", "ASC"],
       //   Or by review date?
     ],
     //  */
@@ -94,16 +99,17 @@ exports.findAllForUser = (req, res) => {
 // Get all reviews
 exports.findAll = (req, res) => {
   Review.findAll({
-    /*
+    //  /*
     include: [
       {
-        model: Book,
-        as: "book",
+        model: BwBook,
+        as: "bw_book",
         required: true,
         include: [
           {
-            model: Author,
-            as: "author",
+            model: BwAuthor,
+            //  This is the table name and it must be *plural*.
+            as: "bw_authors",
             required: false,
           },
         ],
@@ -111,7 +117,7 @@ exports.findAll = (req, res) => {
     ],
     order: [
       //  ["name", "ASC"],
-      [Book, "title", "ASC"],
+      [BwBook, "title", "ASC"],
       //   Or by review date?  Or author?
     ],
     //  */
@@ -140,16 +146,17 @@ exports.findOne = (req, res) => {
 
   Review.findAll({
     where: { id: id },
-    /*
+    //  /*
     include: [
       {
-        model: Book,
-        as: "book",
+        model: BwBook,
+        as: "bw_book",
         required: false,
         include: [
           {
-            model: Author,
-            as: "author",
+            model: BwAuthor,
+            //  This is the table name and it must be *plural*.
+            as: "bw_authors",
             required: false,
           },
         ],
@@ -159,7 +166,7 @@ exports.findOne = (req, res) => {
       //  But there should only be 1 review with this id,
       //  so ... don't need this?
       //  ["name", "ASC"],
-      [Book, "title", "ASC"],
+      [BwBook, "title", "ASC"],
       //   Or by review date?  Or author?
     ],
     //  */

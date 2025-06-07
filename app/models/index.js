@@ -118,10 +118,21 @@ db.recipeIngredient.belongsTo(
 
 // - - - - - - - - - - - - - - - - - - - - - - - - -
 //  Foreign key for book review
+//  TEST  @@@@@@@@@@@@@@@@@@@@###################  TEST WITH BW BOOKS AND AUHTORS
+/*
 db.user.hasMany(db.review, { foreignKey: "userId" });
 db.book.hasMany(db.review, { foreignKey: "bookId" });
 db.review.belongsTo(db.user, { foreignKey: "userId" });
 db.review.belongsTo(db.book, { foreignKey: "bookId" });
+//  */
+
+//  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@################################
+//  Need to associate Review model to users and books.  (... the new book model, BwBook)
+db.user.hasMany(db.review, { foreignKey: "userId" });
+db.bw_book.hasMany(db.review, { foreignKey: "bwBookId" });
+db.review.belongsTo(db.user, { foreignKey: "userId" });
+db.review.belongsTo(db.bw_book, { foreignKey: "bwBookId" });
+
 
 // BookAuthor
 db.book.belongsToMany(db.author, {
@@ -188,6 +199,32 @@ db.bw_book.belongsToMany(db.bw_author, { through: 'bw_book_author' });
 //  BwAuthor.belongsToMany(BwBook, { through: 'BwBook_BwAuthor' });
 db.bw_author.belongsToMany(db.bw_book, { through: 'bw_book_author' });
 
+//  ##############################################################
+/*
+Test setup new BOOK-REVIEW table ~= bridge table with attributes
+between users and books.
+//  */
+
+/*
+const BwBookReviewUser = sequelize.define(
+  'bw_book_review_user',
+  {
+    rating: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
+    reviewText: {
+      type: Sequelize.STRING(3000),
+      allowNull: false,
+    },
+  },
+  { timestamps: false }
+);
+//  */
+
+//  NOTE:  See "models/review.model.js" for definition of "bw_book_review_user" table.
+db.user.belongsToMany(db.bw_book, { through: 'bw_book_review_user' });
+db.bw_book.belongsToMany(db.user, { through: 'bw_book_review_user' });
 //  ##############################################################
 
 module.exports = db;
