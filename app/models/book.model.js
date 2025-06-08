@@ -1,4 +1,3 @@
-
 module.exports = (sequelize, Sequelize) => {
   const Book = sequelize.define("book", {
     id: {
@@ -16,7 +15,7 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
     },
     date: {
-      type: Sequelize.DATE,
+      type: Sequelize.DATEONLY,
       allowNull: true,
     },
     cover: {
