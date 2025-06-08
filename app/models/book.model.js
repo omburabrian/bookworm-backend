@@ -1,11 +1,12 @@
+
 module.exports = (sequelize, Sequelize) => {
-  return sequelize.define("book", {
-    bookId: {
+  const Book = sequelize.define("book", {
+    id: {
       type: Sequelize.INTEGER,
-      primaryKey: true,
       autoIncrement: true,
+      primaryKey: true,
     },
-    title: {
+    isbn: {
       type: Sequelize.STRING,
       allowNull: false,
       validate: {
@@ -13,8 +14,9 @@ module.exports = (sequelize, Sequelize) => {
              msg: "Title cannot be empty",
           },
       },
+      unique: true,
     },
-    ISBN: {
+    title: {
       type: Sequelize.STRING,
       allowNull: false,
       validate: {
@@ -23,14 +25,19 @@ module.exports = (sequelize, Sequelize) => {
         },
       },
     },
-    publicationDate: {
+    date: {
       type: Sequelize.DATE,
+      allowNull: true,
     },
     cover: {
       type: Sequelize.STRING,
+      allowNull: true,
     },
     description: {
       type: Sequelize.TEXT,
+      allowNull: true,
     },
   });
+
+  return Book;
 };
