@@ -3,10 +3,20 @@ module.exports = (sequelize, Sequelize) => {
     userId: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "User ID cannot be empty",
+        },
+      },
     },
     bookId: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Book ID cannot be empty",
+        },
+      },
     },
     listType: {
       type: Sequelize.STRING,
