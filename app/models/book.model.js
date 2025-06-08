@@ -11,7 +11,7 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
       validate: {
           notEmpty: {
-             msg: "Title cannot be empty",
+             msg: "ISBN cannot be empty",
           },
       },
       unique: true,
@@ -21,7 +21,7 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "ISBN cannot be empty",
+          msg: "Title cannot be empty",
         },
       },
     },
