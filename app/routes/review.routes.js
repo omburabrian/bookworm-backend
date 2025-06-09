@@ -33,22 +33,27 @@ module.exports = (app) => {
   // Create a new Review
   router.post("/reviews", [authenticateRoute], Review.create);
 
+  // Update a Review with user ID and book ID
+  router.put(
+    "/reviews/users/:userId/books/:bookId",
+    [authenticateRoute],
+    Review.updateForUserIdBookId
+  );
+  
   // Update a Review with id
+  //  ToDo:  Remove this route.  Does not use its own ID field.
   router.put("/reviews/:id", [authenticateRoute], Review.update);
 
-  //  ToDo:  Revise this route to accept both, book id and user id
-  //          (It's a bridge table.  Model after delete recipe ingreedient. see below)
-  //          See the get() above.
+  //  ToDo:  Remove this route.  Does not use its own ID field.
   // Delete a Review with id
   router.delete("/reviews/:id", [authenticateRoute], Review.delete);
-  /*
-  // Delete a Recipe Ingredient with id
+
+  // Delete a Review with user ID and book ID
   router.delete(
-    "/recipes/:recipeId/recipeIngredients/:id",
+    "/reviews/users/:userId/books/:bookId",
     [authenticateRoute],
-    RecipeIngredient.delete
+    Review.deleteForUserIdBookId
   );
-  //  */
 
   // Delete all Reviews
   router.delete("/reviews", [authenticateRoute], Review.deleteAll);

@@ -196,6 +196,7 @@ exports.findOne = (req, res) => {
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Update a Review by the id in the request
+//  ToDo:  Remove this method.  Must use both, user ID and book ID.  (bridge table)
 exports.update = (req, res) => {
 
   const id = req.params.id;
@@ -222,8 +223,44 @@ exports.update = (req, res) => {
     });
 };
 
+//  updateForUserIdBookId
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Update a Review by the id in the request
+exports.updateForUserIdBookId = (req, res) => {
+
+  const userId = req.params.userId;
+  const bookId = req.params.bookId;
+
+  console.log("Review controller : updateForUserIdBookId(" + userId + ", " + bookId + ")");
+
+  Review.update(req.body, {
+    where: [
+      {userId: userId},
+      {bwBookId: bookId}
+    ]
+  })
+    .then((number) => {
+      if (number == 1) {
+        res.send({
+          message: "Book review was updated successfully.",
+        });
+      } else {
+        res.send({
+          //  ToDo:  Change this error message.  User does not know what "req.body" means.
+          message: `Cannot update book review with user ID = ${userId}, book ID = ${bookId}. Maybe the book review was not found or req.body is empty?`,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Error updating boook review with user ID = " + userId + ", book ID = " + bookId,
+      });
+    });
+};
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Delete a book review with the specified ID in the request.
+//  ToDo:  Remove this method.  Must use both, user ID and book ID.  (bridge table)
 exports.delete = (req, res) => {
 
   const id = req.params.id;
@@ -245,6 +282,39 @@ exports.delete = (req, res) => {
     .catch((err) => {
       res.status(500).send({
         message: err.message || "Could not delete book review with id=" + id,
+      });
+    });
+};
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Delete a book review with the specified user ID and book ID.
+exports.deleteForUserIdBookId = (req, res) => {
+
+  const userId = req.params.userId;
+  const bookId = req.params.bookId;
+
+  //  console.log("Review controller: deleteForUserIdBookId(" + userId + ", " + bookId + ")");
+
+  Review.destroy({
+    where: [
+      {userId: userId},
+      {bwBookId: bookId}
+    ]
+  })
+    .then((number) => {
+      if (number == 1) {
+        res.send({
+          message: "Book review was deleted successfully!",
+        });
+      } else {
+        res.send({
+          message: `Cannot delete book review with user ID = ${userId}, book ID = ${bookId}. Maybe the book review was not found?`,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Could not delete book review with user ID = " + userId + ", book ID = " + bookId
       });
     });
 };
