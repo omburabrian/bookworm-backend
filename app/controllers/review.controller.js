@@ -142,11 +142,15 @@ exports.findAll = (req, res) => {
 // Get a single review with the id
 exports.findOne = (req, res) => {
 
-  const id = req.params.id;
+  const userId = req.params.userId;
+  const bwBookId = req.params.bwBookId;
 
   //  ToDo:  Change this to use the Sequelize.findById() ?
   Review.findAll({
-    where: { id: id },
+    where: {
+      userId: userId,
+      bwBookId: bwBookId
+    },
     //  /*
     include: [
       {
@@ -173,17 +177,19 @@ exports.findOne = (req, res) => {
     //  */
   })
     .then((data) => {
+      //  Verify one was found and then return as object, not array.
+      //  ToDo:  If not found (empty array), then . . . return cannot find, instead.
       if (data) {
         res.send(data);
       } else {
         res.status(404).send({
-          message: `Cannot find book review with id=${id}.`,
+          message: `Cannot find book review with user ID = ${userId}, book ID = ${bookId}.`,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        message: err.message || "Error retrieving book review with id=" + id,
+        message: err.message || `Error retrieving book review with user ID = ${userId}, book ID = ${bookId}.`,
       });
     });
 };

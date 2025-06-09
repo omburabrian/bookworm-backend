@@ -14,14 +14,18 @@ module.exports = (app) => {
   );
 
   // Retrieve a single Review with id
-  router.get("/reviews/:id", Review.findOne);
+  //  router.get("/reviews/:id", Review.findOne);
+
+  //  Retrieve a single Review with user ID and book ID
+  //  This is a bridge table.  Need 2 IDs.
+  router.get("/reviews/users/:userId/books/:bwBookId", Review.findOne);
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   //  AUTHENTICATED ROUTES
 
   // Retrieve all reviews for user
   router.get(
-    "/reviews/user/:userId",
+    "/reviews/users/:userId",
     [authenticateRoute],
     Review.findAllForUser
   );
@@ -32,8 +36,19 @@ module.exports = (app) => {
   // Update a Review with id
   router.put("/reviews/:id", [authenticateRoute], Review.update);
 
+  //  ToDo:  Revise this route to accept both, book id and user id
+  //          (It's a bridge table.  Model after delete recipe ingreedient. see below)
+  //          See the get() above.
   // Delete a Review with id
   router.delete("/reviews/:id", [authenticateRoute], Review.delete);
+  /*
+  // Delete a Recipe Ingredient with id
+  router.delete(
+    "/recipes/:recipeId/recipeIngredients/:id",
+    [authenticateRoute],
+    RecipeIngredient.delete
+  );
+  //  */
 
   // Delete all Reviews
   router.delete("/reviews", [authenticateRoute], Review.deleteAll);
