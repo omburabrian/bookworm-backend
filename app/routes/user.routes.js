@@ -12,6 +12,10 @@ module.exports = (app) => {
   // Retrieve a single User with id
   router.get("/users/:id", User.findOne);
 
+  // Search users by name or email
+  router.get("/users/search", User.search);
+
+
   // Update a User with id
   router.put("/users/:id", [authenticateRoute], User.update);
 

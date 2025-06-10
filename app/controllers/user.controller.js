@@ -136,6 +136,29 @@ exports.update = (req, res) => {
     })
     .catch(err => res.status(500).send({ message: err.message }));
 };
+exports.search = (req, res) => {
+  const query = req.query.query;
+
+  if (!query || query.trim() === "") {
+    return res.status(400).send({ message: "Search query is required." });
+  }
+
+  User.findAll({
+    where: {
+      [Op.or]: [
+        { email: { [Op.like]: `%${query}%` } },
+        { firstName: { [Op.like]: `%${query}%` } },
+        { lastName: { [Op.like]: `%${query}%` } },
+      ],
+    },
+  })
+    .then(data => res.send(data))
+    .catch(err => {
+      console.error("Search error:", err);
+      res.status(500).send({ message: "Error while searching users." });
+    });
+};
+
 
 // Delete user
 exports.delete = (req, res) => {
