@@ -1,5 +1,5 @@
 const db = require("../models");
-const TagType = db.tagtype;
+const TagType = db.tagType;
 
 // Create a new tagtype
 exports.create = async (req, res) => {
@@ -37,7 +37,7 @@ exports.findOne = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const rows = await TagType.update(req.body, {
-      where: { id: req.params.id }
+      where: { tagTypeId: req.params.id }
     });
     if (rows[0] === 0) return res.status(404).send({ message: "TagType not found or unchanged" });
     res.send({ message: "TagType updated" });
@@ -49,7 +49,7 @@ exports.update = async (req, res) => {
 // Delete a tagtype by ID
 exports.delete = async (req, res) => {
   try {
-    const rows = await TagType.destroy({ where: { id: req.params.id } });
+    const rows = await TagType.destroy({ where: { tagTypeId: req.params.id } });
     if (rows === 0) return res.status(404).send({ message: "TagType not found" });
     res.send({ message: "TagType deleted" });
   } catch (err) {

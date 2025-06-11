@@ -48,7 +48,7 @@ exports.findByTagType = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const rows = await Tag.update(req.body, {
-      where: { id: req.params.id }
+      where: { tagId: req.params.id }
     });
     if (rows[0] === 0) return res.status(404).send({ message: "Tag not found or unchanged" });
     res.send({ message: "Tag updated" });
@@ -60,7 +60,7 @@ exports.update = async (req, res) => {
 // Delete a tag by ID
 exports.delete = async (req, res) => {
   try {
-    const rows = await Tag.destroy({ where: { id: req.params.id } });
+    const rows = await Tag.destroy({ where: { tagId: req.params.id } });
     if (rows === 0) return res.status(404).send({ message: "Tag not found" });
     res.send({ message: "Tag deleted" });
   } catch (err) {
