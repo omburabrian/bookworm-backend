@@ -14,7 +14,12 @@ exports.create = async (req, res) => {
 // Get all books
 exports.findAll = async (req, res) => {
   try {
-    const books = await Book.findAll();
+    const books = await Book.findAll({
+      include: [
+        { model: db.author, through: { attributes: [] } },
+        { model: db.tag, through: { attributes: [] } }
+      ]
+    });
     res.send(books);
   } catch (err) {
     res.status(500).send({ message: err.message });
@@ -24,7 +29,12 @@ exports.findAll = async (req, res) => {
 // Get a single book by ID
 exports.findOne = async (req, res) => {
   try {
-    const book = await Book.findByPk(req.params.id);
+    const book = await Book.findByPk(req.params.id, {
+      include: [
+        { model: db.author, through: { attributes: [] } },
+        { model: db.tag, through: { attributes: [] } }
+      ]
+    });
     if (!book) return res.status(404).send({ message: "Book not found" });
     res.send(book);
   } catch (err) {
