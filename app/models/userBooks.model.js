@@ -33,6 +33,9 @@ module.exports = (sequelize, Sequelize) => {
     stopDate: {
       type: Sequelize.DATE,
     },
+    currentPage: {
+      type: Sequelize.DATE,
+    },    
   }, {
     timestamps: false,
   });
