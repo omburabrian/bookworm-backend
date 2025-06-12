@@ -30,7 +30,9 @@ exports.create = (req, res) => {
   const review = {
     rating: req.body.rating,
     reviewText: req.body.reviewText,
-    userId: req.body.userId
+    userId: req.body.userId,
+    //  ToDo:   Change this from bwBookId to bookId.
+    bwBookId: req.body.bookId
   };
 
   // Save Review in the database
