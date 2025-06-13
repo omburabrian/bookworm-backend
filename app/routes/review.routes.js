@@ -18,7 +18,7 @@ module.exports = (app) => {
 
   //  Retrieve a single Review with user ID and book ID
   //  This is a bridge table.  Need 2 IDs.
-  router.get("/reviews/users/:userId/books/:bwBookId", Review.findOne);
+  router.get("/reviews/users/:userId/books/:bookId", Review.findOne);
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   //  AUTHENTICATED ROUTES

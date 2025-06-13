@@ -31,8 +31,8 @@ exports.create = (req, res) => {
     rating: req.body.rating,
     reviewText: req.body.reviewText,
     userId: req.body.userId,
-    //  ToDo:   Change this from bwBookId to bookId.
     bwBookId: req.body.bookId
+    //  bookId: req.body.bookId
   };
 
   // Save Review in the database
@@ -145,13 +145,14 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
 
   const userId = req.params.userId;
-  const bwBookId = req.params.bwBookId;
+  const bookId = req.params.bookId;
 
   //  ToDo:  Change this to use the Sequelize.findById() ?
   Review.findAll({
     where: {
       userId: userId,
-      bwBookId: bwBookId
+      bwBookId: bookId
+      //  bookId: bookId
     },
     //  /*
     include: [
@@ -204,7 +205,11 @@ exports.update = (req, res) => {
   const id = req.params.id;
 
   Review.update(req.body, {
-    where: { id: id },
+    where: {
+      userId: userId,
+      bwBookId: bookId
+      //  bookId: bookId
+    },
   })
     .then((number) => {
       if (number == 1) {
@@ -239,6 +244,7 @@ exports.updateForUserIdBookId = (req, res) => {
     where: [
       {userId: userId},
       {bwBookId: bookId}
+      //  {bookId: bookId}
     ]
   })
     .then((number) => {
@@ -301,6 +307,7 @@ exports.deleteForUserIdBookId = (req, res) => {
     where: [
       {userId: userId},
       {bwBookId: bookId}
+      //  {bookId: bookId}
     ]
   })
     .then((number) => {

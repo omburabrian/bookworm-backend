@@ -14,5 +14,7 @@ module.exports = (sequelize, Sequelize) => {
     },
   });
 
+  Review.removeAttribute("id");
+
   return Review;
 };

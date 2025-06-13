@@ -132,7 +132,7 @@ db.user.hasMany(db.review, { foreignKey: "userId" });
 db.bw_book.hasMany(db.review, { foreignKey: "bwBookId" });
 db.review.belongsTo(db.user, { foreignKey: "userId" });
 db.review.belongsTo(db.bw_book, { foreignKey: "bwBookId" });
-
+//  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@################################
 
 // BookAuthor
 db.book.belongsToMany(db.author, {
@@ -223,8 +223,11 @@ const BwBookReviewUser = sequelize.define(
 //  */
 
 //  NOTE:  See "models/review.model.js" for definition of "bw_book_review_user" table.
-db.user.belongsToMany(db.bw_book, { through: 'bw_book_review_user' });
-db.bw_book.belongsToMany(db.user, { through: 'bw_book_review_user' });
+// db.user.belongsToMany(db.bw_book, { through: 'bw_book_review_user' });
+// db.bw_book.belongsToMany(db.user, { through: 'bw_book_review_user' });
+
+// db.user.belongsToMany(db.bw_book, { through: db.review });
+// db.bw_book.belongsToMany(db.user, { through: db.review });
 //  ##############################################################
 
 module.exports = db;
