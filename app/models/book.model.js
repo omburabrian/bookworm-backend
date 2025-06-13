@@ -38,7 +38,7 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: true,
     },
     pageCount: {
-      type: Sequelize.DATE,
+      type: Sequelize.INTEGER,
     },
   });
 
