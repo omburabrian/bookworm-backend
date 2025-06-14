@@ -37,6 +37,9 @@ require("./app/routes/review.routes")(app);
 require("./app/routes/book.routes")(app);
 require("./app/routes/userBooks.routes")(app);
 require("./app/routes/bookAuthor.routes")(app);
+require("./app/routes/bookTag.routes")(app);
+require("./app/routes/tag.routes")(app);
+require("./app/routes/tagType.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3201;
