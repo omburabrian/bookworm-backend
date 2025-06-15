@@ -28,13 +28,14 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.BOOLEAN,
     },
     startDate: {
-      type: Sequelize.DATE,
+      type: Sequelize.DATEONLY,
     },
     stopDate: {
-      type: Sequelize.DATE,
+      type: Sequelize.DATEONLY,
     },
-  }, {
-    timestamps: false,
+    currentPage: {
+      type: Sequelize.INTEGER,
+    },
   });
 
   UserBooks.removeAttribute("id");

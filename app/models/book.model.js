@@ -37,6 +37,9 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.TEXT,
       allowNull: true,
     },
+    pageCount: {
+      type: Sequelize.INTEGER,
+    },
   });
 
   return Book;
