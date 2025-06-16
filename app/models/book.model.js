@@ -9,14 +9,24 @@ module.exports = (sequelize, Sequelize) => {
     isbn: {
       type: Sequelize.STRING,
       allowNull: false,
+      validate: {
+          notEmpty: {
+             msg: "ISBN cannot be empty",
+          },
+      },
       unique: true,
     },
     title: {
       type: Sequelize.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Title cannot be empty",
+        },
+      },
     },
     date: {
-      type: Sequelize.DATE,
+      type: Sequelize.DATEONLY,
       allowNull: true,
     },
     cover: {
@@ -26,6 +36,9 @@ module.exports = (sequelize, Sequelize) => {
     description: {
       type: Sequelize.TEXT,
       allowNull: true,
+    },
+    pageCount: {
+      type: Sequelize.INTEGER,
     },
   });
 

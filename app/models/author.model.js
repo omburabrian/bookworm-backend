@@ -10,11 +10,17 @@ module.exports = (sequelize, Sequelize) => {
       name: {
         type: Sequelize.STRING,
         allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Name cannot be empty",
+          },
+        },
       },
       description: {
         type: Sequelize.STRING,
       },
-    });
+    }
+  );
 
   return Author;
 };

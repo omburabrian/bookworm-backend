@@ -1,3 +1,5 @@
+const { BOOLEAN } = require("sequelize");
+
 module.exports = (sequelize, Sequelize) => {
   return sequelize.define("tagType", {
     tagTypeId: {
@@ -8,6 +10,14 @@ module.exports = (sequelize, Sequelize) => {
     name: {
       type: Sequelize.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Tag type name cannot be empty",
+        },
+      },
+    },
+    isVisible: {
+      type: Sequelize.BOOLEAN
     },
   });
 };
