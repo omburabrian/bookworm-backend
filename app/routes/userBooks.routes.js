@@ -8,6 +8,11 @@ module.exports = (app) => {
     router.get("/userBooks/:userId", UserBooks.findByUser);
     // Remove a book from a user's list
     router.delete("/userBooks/", UserBooks.remove); 
+    //check if a book is in a user's list
+    router.get("/userBooks/check/:userId/:bookId", UserBooks.checkBookInUserList);
+    //Update a UserBook entry
+    router.put("/userBooks/update/:userId/:bookId", UserBooks.updateUserBook);
+
 
 
   app.use("/bookwormapi", router);
