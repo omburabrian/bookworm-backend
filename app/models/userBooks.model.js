@@ -35,7 +35,15 @@ module.exports = (sequelize, Sequelize) => {
     },
     currentPage: {
       type: Sequelize.INTEGER,
-    },
+    }
+  }, {
+    indexes: [
+      {
+        unique: true,
+        fields: ['userId', 'bookId']
+      }
+    ],
+    timestamps: false,
   });
 
   UserBooks.removeAttribute("id");

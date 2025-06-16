@@ -82,10 +82,18 @@ db.tag.belongsTo(db.tagType, { foreignKey: "tagTypeId" });
 db.tagType.hasMany(db.tag, { foreignKey: "tagTypeId" });
 
 // UserBooks
-db.user.hasMany(db.userBooks, { foreignKey: "userId" });
-db.book.hasMany(db.userBooks, { foreignKey: "bookId" });
-db.userBooks.belongsTo(db.user, { foreignKey: "userId" });
-db.userBooks.belongsTo(db.book, { foreignKey: "bookId" });
+
+db.user.belongsToMany(db.book, {
+  through: db.userBooks,
+  foreignKey: 'userId',
+  otherKey: 'bookId'
+});
+
+db.book.belongsToMany(db.user, {
+  through: db.userBooks,
+  foreignKey: 'bookId',
+  otherKey: 'userId'
+});
 
 // - - - - - - - - - - - - - - - - - - - - - - - - -
 // UserListSettings
