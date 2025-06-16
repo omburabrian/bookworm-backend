@@ -1,6 +1,7 @@
 module.exports = (app) => {
+
   const Author = require("../controllers/author.controller.js");
-  const router = require("express").Router();
+  var router = require("express").Router();
   const { authenticateRoute } = require("../authentication/authentication.js");
 
   // Create a new Author
@@ -23,9 +24,8 @@ module.exports = (app) => {
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   //  Dev tools
-    router.post("/authors/bulkCreate", [authenticateRoute], Author.bulkCreate);
+  router.post("/authors/bulkCreate", [authenticateRoute], Author.bulkCreate);
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
   app.use("/bookwormapi", router);
 };

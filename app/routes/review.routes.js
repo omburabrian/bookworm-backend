@@ -7,17 +7,14 @@ module.exports = (app) => {
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   //  PUBLIC ROUTES
 
-  // Retrieve all Reviews
+  // Get all Reviews
   router.get(
     "/reviews",
     Review.findAll
   );
 
-  // Retrieve a single Review with id
-  //  router.get("/reviews/:id", Review.findOne);
-
-  //  Retrieve a single Review with user ID and book ID
-  //  This is a bridge table.  Need 2 IDs.
+  //  Get a single Review, with user ID and book ID
+  //  This is a bridge table (with attributes).  Need 2 IDs.
   router.get("/reviews/users/:userId/books/:bookId", Review.findOne);
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -39,14 +36,6 @@ module.exports = (app) => {
     [authenticateRoute],
     Review.updateForUserIdBookId
   );
-  
-  // Update a Review with id
-  //  ToDo:  Remove this route.  Does not use its own ID field.
-  router.put("/reviews/:id", [authenticateRoute], Review.update);
-
-  //  ToDo:  Remove this route.  Does not use its own ID field.
-  // Delete a Review with id
-  router.delete("/reviews/:id", [authenticateRoute], Review.delete);
 
   // Delete a Review with user ID and book ID
   router.delete(

@@ -10,11 +10,11 @@ exports.create = (req, res) => {
 
   //  Validate request -- for required fields
   if (req.body.isbn === undefined) {
-    const error = new Error("ISBN cannot be empty for BOOK.");
+    const error = new Error("BOOK ISBN is required.");
     error.statusCode = 400;
     throw error;
   } else if (req.body.title === undefined) {
-    const error = new Error("TITLE cannot be empty for BOOK.");
+    const error = new Error("BOOK TITLE is required.");
     error.statusCode = 400;
     throw error;
   }

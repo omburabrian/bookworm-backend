@@ -10,7 +10,7 @@ exports.create = (req, res) => {
 
   //  Validate request -- for required fields
   if (req.body.name === undefined) {
-    const error = new Error("NAME cannot be empty for AUTHOR.");
+    const error = new Error("Author's NAME is required");
     error.statusCode = 400;
     throw error;
   }

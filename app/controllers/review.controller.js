@@ -1,15 +1,13 @@
 const db = require("../models");
 const Review = db.review;
 
-//  TEST @@@@@@@@@@@@@@@@@@@##################### Change relation to these other tables
-const BwBook = db.bw_book;
-const BwAuthor = db.bw_author;
-//  const Book = db.book;
-//  const Author = db.author;
+const Book = db.book;
+const Author = db.author;
 
 const Op = db.Sequelize.Op;
 
 //  These functions must match those mapped from review.routes.js
+//  ToDo:  No "await"s used.  Should it be?
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Create and Save a new Review
@@ -17,11 +15,11 @@ exports.create = (req, res) => {
 
   // Validate request
   if (req.body.rating === undefined) {
-    const error = new Error("Book rating value must be selected!");
+    const error = new Error("Book rating is required");
     error.statusCode = 400;
     throw error;
   } else if (req.body.reviewText === undefined) {
-    const error = new Error("Book review text cannot be empty!");
+    const error = new Error("Book review text is required");
     error.statusCode = 400;
     throw error;
   }
@@ -31,8 +29,7 @@ exports.create = (req, res) => {
     rating: req.body.rating,
     reviewText: req.body.reviewText,
     userId: req.body.userId,
-    bwBookId: req.body.bookId
-    //  bookId: req.body.bookId
+    bookId: req.body.bookId
   };
 
   // Save Review in the database
@@ -56,29 +53,22 @@ exports.findAllForUser = (req, res) => {
 
   Review.findAll({
     where: { userId: userId },
-    //  ToDo: Add BOOK to REVIEW
-    //  /*
     include: [
       {
-        model: BwBook,
-        as: "bw_book",
+        model: Book,
         required: true,
         include: [
           {
-            model: BwAuthor,
-            //  This is the table name and it must be *plural*.
-            as: "bw_authors",
+            model: Author,
             required: false,
           },
         ],
       },
     ],
     order: [
-      //  ["name", "ASC"],
-      [BwBook, "title", "ASC"],
+      [Book, "title", "ASC"],
       //   Or by review date?
     ],
-    //  */
   })
     .then((data) => {
       if (data) {
@@ -101,28 +91,22 @@ exports.findAllForUser = (req, res) => {
 // Get all reviews
 exports.findAll = (req, res) => {
   Review.findAll({
-    //  /*
     include: [
       {
-        model: BwBook,
-        as: "bw_book",
+        model: Book,
         required: true,
         include: [
           {
-            model: BwAuthor,
-            //  This is the table name and it must be *plural*.
-            as: "bw_authors",
+            model: Author,
             required: false,
           },
         ],
       },
     ],
     order: [
-      //  ["name", "ASC"],
-      [BwBook, "title", "ASC"],
+      [Book, "title", "ASC"],
       //   Or by review date?  Or author?
     ],
-    //  */
   })
     .then((data) => {
       if (data) {
@@ -147,40 +131,34 @@ exports.findOne = (req, res) => {
   const userId = req.params.userId;
   const bookId = req.params.bookId;
 
-  //  ToDo:  Change this to use the Sequelize.findById() ?
   Review.findAll({
     where: {
       userId: userId,
-      bwBookId: bookId
-      //  bookId: bookId
+      bookId: bookId
     },
-    //  /*
     include: [
       {
-        model: BwBook,
-        as: "bw_book",
-        required: false,
+        model: Book,
+        required: true,
         include: [
           {
-            model: BwAuthor,
-            //  This is the table name and it must be *plural*.
-            as: "bw_authors",
+            model: Author,
             required: false,
           },
         ],
       },
     ],
+    //  There should only be 1 review with this
+    //  user / book combination, so order not needed.
+    /*
     order: [
-      //  But there should only be 1 review with this id,
-      //  so ... don't need this?
-      //  ["name", "ASC"],
-      [BwBook, "title", "ASC"],
+      [Book, "title", "ASC"],
       //   Or by review date?  Or author?
     ],
     //  */
   })
     .then((data) => {
-      //  Verify one was found and then return as object, not array.
+      //  ToDo:  If *the* REVIEW is found, then return as object, not array.
       //  ToDo:  If not found (empty array), then . . . return cannot find, instead.
       if (data) {
         res.send(data);
@@ -199,40 +177,6 @@ exports.findOne = (req, res) => {
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Update a Review by the id in the request
-//  ToDo:  Remove this method.  Must use both, user ID and book ID.  (bridge table)
-exports.update = (req, res) => {
-
-  const id = req.params.id;
-
-  Review.update(req.body, {
-    where: {
-      userId: userId,
-      bwBookId: bookId
-      //  bookId: bookId
-    },
-  })
-    .then((number) => {
-      if (number == 1) {
-        res.send({
-          message: "Book review was updated successfully.",
-        });
-      } else {
-        res.send({
-          //  ToDo:  Change this error message.  User does not know what "req.body" means.
-          message: `Cannot update book review with id=${id}. Maybe the book review was not found or req.body is empty?`,
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Error updating boook review with id=" + id,
-      });
-    });
-};
-
-//  updateForUserIdBookId
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Update a Review by the id in the request
 exports.updateForUserIdBookId = (req, res) => {
 
   const userId = req.params.userId;
@@ -243,8 +187,7 @@ exports.updateForUserIdBookId = (req, res) => {
   Review.update(req.body, {
     where: [
       {userId: userId},
-      {bwBookId: bookId}
-      //  {bookId: bookId}
+      {bookId: bookId}
     ]
   })
     .then((number) => {
@@ -254,42 +197,13 @@ exports.updateForUserIdBookId = (req, res) => {
         });
       } else {
         res.send({
-          //  ToDo:  Change this error message.  User does not know what "req.body" means.
-          message: `Cannot update book review with user ID = ${userId}, book ID = ${bookId}. Maybe the book review was not found or req.body is empty?`,
+          message: `Cannot update book review with user ID = ${userId}, book ID = ${bookId}.`,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
         message: err.message || "Error updating boook review with user ID = " + userId + ", book ID = " + bookId,
-      });
-    });
-};
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Delete a book review with the specified ID in the request.
-//  ToDo:  Remove this method.  Must use both, user ID and book ID.  (bridge table)
-exports.delete = (req, res) => {
-
-  const id = req.params.id;
-
-  Review.destroy({
-    where: { id: id },
-  })
-    .then((number) => {
-      if (number == 1) {
-        res.send({
-          message: "Book review was deleted successfully!",
-        });
-      } else {
-        res.send({
-          message: `Cannot delete book review with id=${id}. Maybe the book review was not found?`,
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Could not delete book review with id=" + id,
       });
     });
 };
@@ -306,8 +220,7 @@ exports.deleteForUserIdBookId = (req, res) => {
   Review.destroy({
     where: [
       {userId: userId},
-      {bwBookId: bookId}
-      //  {bookId: bookId}
+      {bookId: bookId}
     ]
   })
     .then((number) => {
@@ -317,7 +230,7 @@ exports.deleteForUserIdBookId = (req, res) => {
         });
       } else {
         res.send({
-          message: `Cannot delete book review with user ID = ${userId}, book ID = ${bookId}. Maybe the book review was not found?`,
+          message: `Cannot delete book review with user ID = ${userId}, book ID = ${bookId}.`,
         });
       }
     })
@@ -331,12 +244,15 @@ exports.deleteForUserIdBookId = (req, res) => {
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Delete all book reviews from the database.
 exports.deleteAll = (req, res) => {
+
+  //  ToDo:  What about using >>>  await Review.truncate(); ?
+
   Review.destroy({
     where: {},
     truncate: false,
   })
     .then((number) => {
-      res.send({ message: `${number} book reviews were deleted successfully!` });
+      res.send({ message: `${number} book reviews were successfully deleted` });
     })
     .catch((err) => {
       res.status(500).send({
@@ -358,7 +274,7 @@ exports.bulkCreate = (req, res) => {
   Review.bulkCreate(reviews)
     .then((data) => {
       res.send(data);
-      //  res.send({ message: `${number} book reviews were created successfully!` });
+      //  - OR ? - res.send({ message: `${number} book reviews were created successfully` });
     })
     .catch((err) => {
       res.status(500).send({
