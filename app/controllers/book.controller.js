@@ -18,7 +18,10 @@ exports.findAll = async (req, res) => {
       include: [
         { model: db.author, through: { attributes: [] } },
         { model: db.tag, through: { attributes: [] } }
-      ]
+      ],
+      order: [
+        'title',
+      ],
     });
     res.send(books);
   } catch (err) {
