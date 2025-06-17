@@ -8,16 +8,18 @@ async function generateText(prompt) {
     //  This was successful:
     //  return 'cohereClient.js: async function generateText(prompt) {';
 
-
-    console.log('Sending this prompt to cohere:');
-    console.log(prompt);
-    console.log(' . . . ');
+    //  The prompt is still good at this point:
+    // console.log('generteText(prompt) = ');
+    // console.log(prompt);
+    // console.log(' . . . ');
 
     //  This returned a response.body = 1;
     const response = await cohere.generate({
         model: 'command',
         prompt: prompt,
-        maxTokens: 50,
+        //  maxTokens: 50,
+        maxTokens: 1000,
+        temperature: 0.2, // Low temperature for deterministic output
     });
 
     //  This worked.  But tells me there is no BODY in the response.

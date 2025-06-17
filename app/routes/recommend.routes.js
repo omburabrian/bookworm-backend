@@ -24,6 +24,13 @@ module.exports = (app) => {
         Recommend.ask
     );
 
+    //  Get book recommendations based on list of book titles
+    router.post(
+        "/recommend/from/:criteriaAttribute",
+        //  For now, just get by TITLES
+        Recommend.getFromTitles
+    );
+
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     app.use("/bookwormapi", router);
 };

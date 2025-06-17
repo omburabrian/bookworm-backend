@@ -39,8 +39,6 @@ require("./app/routes/bookAuthor.routes")(app);
 require("./app/routes/bookTag.routes")(app);
 require("./app/routes/tag.routes")(app);
 require("./app/routes/tagType.routes")(app);
-
-//  Testing A.I.   @@@@@@@@@@@@@@@@@@@@@@##################
 require("./app/routes/recommend.routes")(app);
 
 // set port, listen for requests
