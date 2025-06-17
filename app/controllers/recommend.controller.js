@@ -4,9 +4,9 @@ const { generateText } = require('../services/cohereClient.js');
 
 async function askMe(prompt) {
 
-    return 'You got to the askMe() with this prompt: \"'
-        + prompt + '\"';
-
+    //  This was successful:
+    // return 'You got to the askMe() with this prompt: \"'
+    //     + prompt + '\"';
 
     //  const prompt = "What is the capital of France?";
     const response = await generateText(prompt);
