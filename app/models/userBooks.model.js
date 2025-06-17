@@ -3,10 +3,20 @@ module.exports = (sequelize, Sequelize) => {
     userId: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "User ID cannot be empty",
+        },
+      },
     },
     bookId: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Book ID cannot be empty",
+        },
+      },
     },
     listType: {
       type: Sequelize.STRING,
@@ -18,12 +28,21 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.BOOLEAN,
     },
     startDate: {
-      type: Sequelize.DATE,
+      type: Sequelize.DATEONLY,
     },
     stopDate: {
-      type: Sequelize.DATE,
+      type: Sequelize.DATEONLY,
     },
+    currentPage: {
+      type: Sequelize.INTEGER,
+    }
   }, {
+    indexes: [
+      {
+        unique: true,
+        fields: ['userId', 'bookId']
+      }
+    ],
     timestamps: false,
   });
 

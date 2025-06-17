@@ -177,3 +177,25 @@ exports.deleteAll = (req, res) => {
     .then(num => res.send({ message: `${num} users were deleted successfully!` }))
     .catch(err => res.status(500).send({ message: err.message }));
 };
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//  Create multiple users at once (from JSON array)
+exports.bulkCreate = (req, res) => {
+
+  //  Create a collection of users directly from the JSON array in the body.
+  const users = req.body;
+
+  //  console.log(users);
+
+  User.bulkCreate(users)
+    .then((data) => {
+      res.send(data);
+      //  res.send({ message: `${number} book users were created successfully!` });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "An error occurred during bulk creation of users.",
+      });
+    });
+};

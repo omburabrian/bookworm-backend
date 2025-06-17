@@ -16,10 +16,6 @@ db.sequelize = sequelize;
 
 // ------------------------------------------------------------
 //  Include the models for the database tables.
-db.ingredient = require("./ingredient.model.js")(sequelize, Sequelize);
-db.recipe = require("./recipe.model.js")(sequelize, Sequelize);
-db.recipeStep = require("./recipeStep.model.js")(sequelize, Sequelize);
-db.recipeIngredient = require("./recipeIngredient.model.js")(sequelize, Sequelize);
 db.session = require("./session.model.js")(sequelize, Sequelize);
 db.user = require("./user.model.js")(sequelize, Sequelize);
 db.author = require("./author.model.js")(sequelize, Sequelize); //register author model in index.js
@@ -33,11 +29,11 @@ db.tagType = require("./tagType.model.js")(sequelize, Sequelize);
 db.userBooks = require("./userBooks.model.js")(sequelize, Sequelize);
 db.userListSettings = require("./userListSettings.model.js")(sequelize, Sequelize);
 
-// ------------------------------------------------------------
-//  Define the foreign keys for the various models/tables.
+// --------------------------------------------------------------------
+//  Define the relationships between the models (DB table foriegn keys)
 
 // - - - - - - - - - - - - - - - - - - - - - - - - -
-// foreign key for session
+//  session
 db.user.hasMany(
   db.session,
   { as: "session" },
@@ -50,76 +46,14 @@ db.session.belongsTo(
 );
 
 // - - - - - - - - - - - - - - - - - - - - - - - - -
-// foreign key for recipe
-db.user.hasMany(
-  db.recipe,
-  { as: "recipe" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.recipe.belongsTo(
-  db.user,
-  { as: "user" },
-  { foreignKey: { allowNull: true }, onDelete: "CASCADE" }
-);
-
-// - - - - - - - - - - - - - - - - - - - - - - - - -
-// foreign key for recipeStep
-db.recipe.hasMany(
-  db.recipeStep,
-  { as: "recipeStep" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.recipeStep.belongsTo(
-  db.recipe,
-  { as: "recipe" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-
-// - - - - - - - - - - - - - - - - - - - - - - - - -
-// foreign keys for recipeIngredient
-db.recipeStep.hasMany(
-  db.recipeIngredient,
-  { as: "recipeIngredient" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.recipe.hasMany(
-  db.recipeIngredient,
-  { as: "recipeIngredient" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.ingredient.hasMany(
-  db.recipeIngredient,
-  { as: "recipeIngredient" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.recipeIngredient.belongsTo(
-  db.recipeStep,
-  { as: "recipeStep" },
-  { foreignKey: { allowNull: true }, onDelete: "CASCADE" }
-);
-db.recipeIngredient.belongsTo(
-  db.recipe,
-  { as: "recipe" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.recipeIngredient.belongsTo(
-  db.ingredient,
-  { as: "ingredient" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-
-//  ############################################################
-//  ToDo:   Finish foreign keys for book review
-//          Test without them first.
-
-// - - - - - - - - - - - - - - - - - - - - - - - - -
-//  Foreign key for book review
+//  book review
 db.user.hasMany(db.review, { foreignKey: "userId" });
 db.book.hasMany(db.review, { foreignKey: "bookId" });
 db.review.belongsTo(db.user, { foreignKey: "userId" });
 db.review.belongsTo(db.book, { foreignKey: "bookId" });
 
-// BookAuthor
+// - - - - - - - - - - - - - - - - - - - - - - - - -
+//  BookAuthor
 db.book.belongsToMany(db.author, {
   through: db.bookAuthor,
   foreignKey: "bookId",
@@ -131,6 +65,7 @@ db.author.belongsToMany(db.book, {
   otherKey: "bookId",
 });
 
+// - - - - - - - - - - - - - - - - - - - - - - - - -
 // BookTag
 db.book.belongsToMany(db.tag, {
   through: db.bookTag,
@@ -147,15 +82,25 @@ db.tag.belongsTo(db.tagType, { foreignKey: "tagTypeId" });
 db.tagType.hasMany(db.tag, { foreignKey: "tagTypeId" });
 
 // UserBooks
-db.user.hasMany(db.userBooks, { foreignKey: "userId" });
-db.book.hasMany(db.userBooks, { foreignKey: "bookId" });
-db.userBooks.belongsTo(db.user, { foreignKey: "userId" });
-db.userBooks.belongsTo(db.book, { foreignKey: "bookId" });
 
+db.user.belongsToMany(db.book, {
+  through: db.userBooks,
+  foreignKey: 'userId',
+  otherKey: 'bookId'
+});
+
+db.book.belongsToMany(db.user, {
+  through: db.userBooks,
+  foreignKey: 'bookId',
+  otherKey: 'userId'
+});
+
+// - - - - - - - - - - - - - - - - - - - - - - - - -
 // UserListSettings
 db.user.hasMany(db.userListSettings, { foreignKey: "userId" });
 db.userListSettings.belongsTo(db.user, { foreignKey: "userId" });
 
+// - - - - - - - - - - - - - - - - - - - - - - - - -
 // Friends (self-referencing many-to-many)
 db.user.belongsToMany(db.user, {
   through: db.friends,
@@ -170,6 +115,6 @@ db.user.belongsToMany(db.user, {
   otherKey: "userId",
 });
 
-//  ############################################################
+// - - - - - - - - - - - - - - - - - - - - - - - - -
 
 module.exports = db;
