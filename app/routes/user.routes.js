@@ -21,5 +21,11 @@ module.exports = (app) => {
   // Delete all User
   router.delete("/users/", [authenticateRoute], User.deleteAll);
 
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //  Dev tools
+    router.post("/users/bulkCreate", [authenticateRoute], User.bulkCreate);
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   app.use("/bookwormapi", router);
 };

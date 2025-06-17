@@ -33,8 +33,8 @@ app.get("/", (req, res) => {
 require("./app/routes/auth.routes.js")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/author.routes")(app); // register author routes
-require("./app/routes/review.routes")(app);
 require("./app/routes/book.routes")(app);
+require("./app/routes/review.routes")(app);
 require("./app/routes/userBooks.routes")(app);
 require("./app/routes/bookAuthor.routes")(app);
 require("./app/routes/bookTag.routes")(app);

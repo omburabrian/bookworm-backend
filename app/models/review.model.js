@@ -6,15 +6,15 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "Rating cannot be empty",
+          msg: "RATING is required",
         },
         min: {
           args: 1,
-          msg: "Rating must be at least 1",
+          msg: "RATING value range is [1 to 5]",
         },
         max: {
           args: 5,
-          msg: "Rating must be at most 5",
+          msg: "RATING value range is [1 to 5]",
         },
       },
     },
@@ -23,11 +23,14 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
             validate: {
           notEmpty: {
-             msg: "Review cannot be empty",
+             msg: "REVIEW's TEXT cannot be empty",
           },
       },
     },
   });
+
+  //  ToDo:  Will this ID be created if leave off this statement?
+  //  Review.removeAttribute("id");
 
   return Review;
 };

@@ -1,6 +1,6 @@
 module.exports = (app) => {
   const BookTag = require("../controllers/bookTag.controller.js");
-  const router = require("express").Router();
+  var router = require("express").Router();
   const { authenticateRoute } = require("../authentication/authentication.js");
 
   // Create a new BookTag link
