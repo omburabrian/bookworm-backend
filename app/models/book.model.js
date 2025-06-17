@@ -1,26 +1,46 @@
+
 module.exports = (sequelize, Sequelize) => {
-  return sequelize.define("book", {
-    bookId: {
+  const Book = sequelize.define("book", {
+    id: {
       type: Sequelize.INTEGER,
-      primaryKey: true,
       autoIncrement: true,
+      primaryKey: true,
+    },
+    isbn: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      validate: {
+          notEmpty: {
+             msg: "ISBN cannot be empty",
+          },
+      },
+      unique: true,
     },
     title: {
       type: Sequelize.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Title cannot be empty",
+        },
+      },
     },
-    ISBN: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    publicationDate: {
-      type: Sequelize.DATE,
+    date: {
+      type: Sequelize.DATEONLY,
+      allowNull: true,
     },
     cover: {
       type: Sequelize.STRING,
+      allowNull: true,
     },
     description: {
       type: Sequelize.TEXT,
+      allowNull: true,
+    },
+    pageCount: {
+      type: Sequelize.INTEGER,
     },
   });
+
+  return Book;
 };

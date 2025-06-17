@@ -7,6 +7,11 @@ module.exports = (sequelize, Sequelize) => {
     authorId: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Author ID cannot be empty",
+        },
+      },
     },
   }, {
     timestamps: false,

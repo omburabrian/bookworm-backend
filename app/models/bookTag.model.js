@@ -7,6 +7,11 @@ module.exports = (sequelize, Sequelize) => {
     tagId: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Tag ID cannot be empty",
+        },
+      },
     },
   }, {
     timestamps: false,
