@@ -5,7 +5,7 @@ const { generateText } = require('../services/cohereClient.js');
 const mockBookList = [
     {
         title: "Book One from backend",
-        author: [
+        authors: [
             {
                 name: "Doe, John"
             },
@@ -17,7 +17,7 @@ const mockBookList = [
     },
     {
         title: "Book Two from backend",
-        author: [
+        authors: [
             {
                 name: "Doe2, John2"
             },
@@ -26,7 +26,7 @@ const mockBookList = [
     },
     {
         title: "Book Three from backend",
-        author: [
+        authors: [
             {
                 name: "Doe3, John3"
             },
@@ -80,7 +80,7 @@ exports.get = (req, res) => {
     let returnJson = [
     {
         title: "Book One from backend",
-        author: [
+        authors: [
             {
                 name: "Doe, John"
             },
@@ -92,7 +92,7 @@ exports.get = (req, res) => {
     },
     {
         title: "Book Two from backend",
-        author: [
+        authors: [
             {
                 name: "Doe2, John2"
             },
@@ -101,7 +101,7 @@ exports.get = (req, res) => {
     },
     {
         title: "Book Three from backend",
-        author: [
+        authors: [
             {
                 name: "Doe3, John3"
             },
