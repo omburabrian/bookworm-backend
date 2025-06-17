@@ -2,6 +2,44 @@
 //  ( This version of RECOMMENDations uses the cohere.com AI API. )
 const { generateText } = require('../services/cohereClient.js');
 
+const mockBookList = [
+    {
+        title: "Book One from backend",
+        author: [
+            {
+                name: "Doe, John"
+            },
+            {
+                name: "Peterman, Jay"
+            }
+        ],
+        description: "This is a mystery. from backend"
+    },
+    {
+        title: "Book Two from backend",
+        author: [
+            {
+                name: "Doe2, John2"
+            },
+        ],
+        description: "This is a science fiction story. from backend"
+    },
+    {
+        title: "Book Three from backend",
+        author: [
+            {
+                name: "Doe3, John3"
+            },
+            {
+                name: "Peterman3, Jay3"
+            },
+        ],
+        description: "This is an autobigraphy. from backend"
+    },
+];
+
+
+
 async function askMe(prompt) {
 
     //  This was successful:
@@ -20,7 +58,67 @@ async function askMe(prompt) {
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //  Test:  Ask any question and return the response.
 exports.get = (req, res) => {
-    res.send('You got the get... again.');
+
+
+    //  Will axios automatically stringify this, etc.?
+    //  res.send(mockBookList.value);
+
+
+    /*
+
+    //  Create a mock return value:  generations[0].text
+    let returnJson = {
+        generations: [
+            {
+                text: "Well, what do we have here?!"
+            },
+        ],
+    };
+    //  */
+
+
+    let returnJson = [
+    {
+        title: "Book One from backend",
+        author: [
+            {
+                name: "Doe, John"
+            },
+            {
+                name: "Peterman, Jay"
+            }
+        ],
+        description: "This is a mystery. from backend"
+    },
+    {
+        title: "Book Two from backend",
+        author: [
+            {
+                name: "Doe2, John2"
+            },
+        ],
+        description: "This is a science fiction story. from backend"
+    },
+    {
+        title: "Book Three from backend",
+        author: [
+            {
+                name: "Doe3, John3"
+            },
+            {
+                name: "Peterman3, Jay3"
+            },
+        ],
+        description: "This is an autobigraphy. from backend"
+    },
+];
+
+
+res.send(returnJson);
+
+
+    //  res.send(JSON.stringify(returnJson));
+
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
