@@ -24,7 +24,8 @@ module.exports = (app) => {
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   //  Dev tools
-  router.post("/books/bulkCreate", [authenticateRoute], Book.bulkCreate);
+  //  Not available in this version:
+  //  router.post("/books/bulkCreate", [authenticateRoute], Book.bulkCreate);
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   app.use("/bookwormapi", router);
