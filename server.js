@@ -2,7 +2,6 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
-
 const app = express();
 
 const db = require("./app/models");
@@ -40,6 +39,7 @@ require("./app/routes/bookAuthor.routes")(app);
 require("./app/routes/bookTag.routes")(app);
 require("./app/routes/tag.routes")(app);
 require("./app/routes/tagType.routes")(app);
+require("./app/routes/recommend.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3201;
